@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  redis:
+    restart: always
+    image: sameersbn/redis:latest
+    command:
+    - --loglevel warning
+    volumes:
+    - /srv/docker/gitlab/redis:/var/lib/redis:Z
+
+  postgresql:
+    restart: always
+    image: sameersbn/postgresql:9.4-22
+    volumes:
+      - /srv/docker/gitlab/postgresql:/var/lib/postgresql:Z
+    env_file:
+      - postgresql.env
+
+  gitlab:
+    restart: always
+    image: sameersbn/gitlab:8.9.5
+    depends_on:
+      - redis
+      - postgresql
+      - mailer
+    ports:
+      - "10080:80"
+      - "10022:22"
+    volumes:
+      - /srv/docker/gitlab/gitlab:/home/git/data:Z
+    env_file:
+      - gitlab.env
+  mailer:
+    restart: always
+    image: catatnight/postfix
+    ports:
+      - "10025:25"
+    env_file:
+      - smtp.env
