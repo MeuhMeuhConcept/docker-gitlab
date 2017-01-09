@@ -11,7 +11,7 @@ services:
 
   postgresql:
     restart: always
-    image: sameersbn/postgresql:9.4-22
+    image: sameersbn/postgresql:9.5-4
     volumes:
       - /srv/docker/gitlab/postgresql:/var/lib/postgresql:Z
     env_file:
@@ -19,7 +19,7 @@ services:
 
   gitlab:
     restart: always
-    image: sameersbn/gitlab:8.9.5
+    image: sameersbn/gitlab:8.15.2
     depends_on:
       - redis
       - postgresql
