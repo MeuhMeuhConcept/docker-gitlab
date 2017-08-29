@@ -2,3 +2,6 @@ docker-compose.yml
 gitlab.env
 postgresql.env
 smtp.env
+
+/data/*
+!/data/.gitkeep

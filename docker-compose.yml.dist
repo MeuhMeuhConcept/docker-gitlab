@@ -1,40 +1,45 @@
-version: '2'
+version: '3.2'
 
 services:
   redis:
-    restart: always
     image: sameersbn/redis:latest
     command:
     - --loglevel warning
     volumes:
-    - /srv/docker/gitlab/redis:/var/lib/redis:Z
+    - $PWD/data/redis:/var/lib/redis
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   postgresql:
-    restart: always
     image: sameersbn/postgresql:9.5-4
     volumes:
-      - /srv/docker/gitlab/postgresql:/var/lib/postgresql:Z
+      - $PWD/data/postgresql:/var/lib/postgresql
     env_file:
       - postgresql.env
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   gitlab:
-    restart: always
-    image: sameersbn/gitlab:8.15.2
-    depends_on:
-      - redis
-      - postgresql
-      - mailer
+    image: sameersbn/gitlab:9.5.1
     ports:
       - "10080:80"
       - "10022:22"
     volumes:
-      - /srv/docker/gitlab/gitlab:/home/git/data:Z
+      - $PWD/data/gitlab:/home/git/data
     env_file:
       - gitlab.env
+    deploy:
+      restart_policy:
+        condition: on-failure
+
   mailer:
-    restart: always
     image: catatnight/postfix
     ports:
       - "10025:25"
     env_file:
       - smtp.env
+    deploy:
+      restart_policy:
+        condition: on-failure
