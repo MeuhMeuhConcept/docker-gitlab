@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   redis:
-    image: sameersbn/redis:latest
+    image: sameersbn/redis:4.0.9-2
     command:
     - --loglevel warning
     volumes:
@@ -12,7 +12,7 @@ services:
         condition: on-failure
 
   postgresql:
-    image: sameersbn/postgresql:9.5-4
+    image: sameersbn/postgresql:10-2
     volumes:
       - $PWD/data/postgresql:/var/lib/postgresql
     env_file:
@@ -22,7 +22,7 @@ services:
         condition: on-failure
 
   gitlab:
-    image: sameersbn/gitlab:9.5.1
+    image: sameersbn/gitlab:12.5.2
     ports:
       - "10080:80"
       - "10022:22"
